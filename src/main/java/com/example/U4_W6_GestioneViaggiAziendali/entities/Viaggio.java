@@ -1,6 +1,7 @@
 package com.example.U4_W6_GestioneViaggiAziendali.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +21,19 @@ public class Viaggio {
     private Long id;
     @Column(nullable = false)
     private String destinazione;
+    @Column(nullable = false)
     private LocalDate dataViaggio;
     private String stato;
 
-    @OneToMany(mappedBy = "idVaggio")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idViaggio")
     private List<Prenotazione> prenotazioni;
 
-    public Viaggio(String destinazione, LocalDate dataViaggio, String stato) {
+    public Viaggio(String destinazione, LocalDate dataViaggio, String stato, List<Prenotazione> prenotazioni) {
         this.destinazione = destinazione;
         this.dataViaggio = dataViaggio;
         this.stato = stato;
     }
+
+
 }

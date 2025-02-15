@@ -1,9 +1,6 @@
 package com.example.U4_W6_GestioneViaggiAziendali.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +16,11 @@ public class Prenotazione {
     @Id
     @GeneratedValue
     private Long id;
-
+    @Column(nullable = false)
     private Long idDipendente;
+    @Column(nullable = false)
     private Long idVaggio;
+    @Column(nullable = false)
     private LocalDate data;
     private String note;
 

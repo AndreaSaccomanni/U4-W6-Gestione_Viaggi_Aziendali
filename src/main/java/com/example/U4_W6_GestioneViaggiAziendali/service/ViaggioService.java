@@ -7,6 +7,7 @@ import com.example.U4_W6_GestioneViaggiAziendali.repository.ViaggioDAORepository
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,34 +17,50 @@ public class ViaggioService {
     @Autowired
     private ViaggioDAORepository viaggioDAO;
 
-    public Viaggio createViaggio(ViaggioPayload viaggioPayload) {
-        Viaggio viaggio = new Viaggio();
+    //metodo per inserire un nuovo viaggio
+    public Long createViaggio(ViaggioPayload viaggioPayload) {
+        Viaggio viaggio = fromDTOToEntity(viaggioPayload);
+        return viaggioDAO.save(viaggio).getId();
+    }
+
+
+    //metodo per ottenere un viaggio tramite id
+    public ViaggioPayload getViaggio(Long id) {
+        Optional<Viaggio> viaggio = viaggioDAO.findById(id);
+        if (viaggio.isPresent()) {
+            return fromEntityToDTO(viaggio.get());
+        } else {
+            throw new ViaggioNotFound("Viaggio con id: " + id + " non trovato");
+        }
+    }
+
+    //metodo per ottenre tutti i viaggi nel database
+    public List<ViaggioPayload> getAllViaggi() {
+        List<Viaggio> viaggi = viaggioDAO.findAll();
+        List<ViaggioPayload> viaggiPayload = new ArrayList<>();
+        for(Viaggio viaggio : viaggi){
+            viaggiPayload.add(fromEntityToDTO(viaggio));
+        }
+        return viaggiPayload;
+    }
+
+    public ViaggioPayload updateViaggio(Long id, ViaggioPayload viaggioPayload) {
+        Viaggio viaggio = viaggioDAO.findById(id)
+                .orElseThrow(() -> new ViaggioNotFound("Viaggio con id: " + id + " non trovato"));
+
         viaggio.setDestinazione(viaggioPayload.getDestinazione());
         viaggio.setDataViaggio(viaggioPayload.getDataViaggio());
         viaggio.setStato(viaggioPayload.getStato());
-        return viaggioDAO.save(viaggio);
+        viaggio.setPrenotazioni(viaggioPayload.getPrenotazioni());
+
+        return fromEntityToDTO(viaggioDAO.save(viaggio));
     }
 
 
-    public Viaggio getViaggio(Long id) throws ViaggioNotFound {
-        return viaggioDAO.findById(id).orElseThrow(() -> new ViaggioNotFound("Viaggio non trovato"));
-    }
+    public void deleteViaggio(Long id) {
+        Viaggio viaggio = viaggioDAO.findById(id)
+                .orElseThrow(() -> new ViaggioNotFound("Viaggio con id: " + id + " non trovato"));
 
-
-    public List<Viaggio> getAllViaggi() {
-        return viaggioDAO.findAll();
-    }
-
-    public Viaggio updateViaggio(Long id, ViaggioPayload viaggioPayload) throws ViaggioNotFound {
-        Viaggio viaggio = getViaggio(id);
-        viaggio.setDestinazione(viaggioPayload.getDestinazione());
-        viaggio.setDataViaggio(viaggioPayload.getDataViaggio());
-        viaggio.setStato(viaggioPayload.getStato());
-        return viaggioDAO.save(viaggio);
-    }
-
-    public void deleteViaggio(Long id) throws ViaggioNotFound {
-        Viaggio viaggio = getViaggio(id);
         viaggioDAO.delete(viaggio);
     }
 
@@ -51,16 +68,17 @@ public class ViaggioService {
         return new ViaggioPayload(
                 viaggio.getDestinazione(),
                 viaggio.getDataViaggio(),
-                viaggio.getStato()
+                viaggio.getStato(),
+                viaggio.getPrenotazioni()
         );
     }
 
     public Viaggio fromDTOToEntity(ViaggioPayload viaggioPayload) {
         return new Viaggio(
-
                 viaggioPayload.getDestinazione(),
                 viaggioPayload.getDataViaggio(),
-                viaggioPayload.getStato()
+                viaggioPayload.getStato(),
+                viaggioPayload.getPrenotazioni()
         );
     }
 }

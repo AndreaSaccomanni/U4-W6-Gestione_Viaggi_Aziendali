@@ -9,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/dipendenti")
@@ -20,40 +18,36 @@ public class DipendenteController {
     @Autowired
     private DipendenteService dipendenteService;
 
-    @PostMapping
-    public ResponseEntity<Dipendente> createDipendente(@RequestBody DipendentePayload dipendentePayload) {
-        Dipendente dipendente = dipendenteService.createDipendente(dipendentePayload);
-        return new ResponseEntity<>(dipendente, HttpStatus.CREATED);
+
+    @PostMapping("/new")
+    public ResponseEntity<String> createDipendente(@RequestBody DipendentePayload dipendentePayload) {
+        try {
+            Long idGenerato = dipendenteService.createDipendente(dipendentePayload);
+            return new ResponseEntity<>("Dipendente aggiunto correttamente con id: " + idGenerato, HttpStatus.CREATED);
+        }catch(Exception e){
+            return new ResponseEntity<>("Errore nell'inserimento del dpendente", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dipendente> getDipendente(@PathVariable Long id) {
-        try {
-            Dipendente dipendente = dipendenteService.getDipendente(id);
-            return ResponseEntity.ok(dipendente);
-        } catch (DipendenteNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public DipendentePayload getDipendente(@PathVariable Long id) {
+        return dipendenteService.getDipendente(id);
     }
 
-    @GetMapping
-    public List<Dipendente> getAllDipendenti() {
+    @GetMapping("/all")
+    public List<DipendentePayload> getAllDipendenti() {
         return dipendenteService.getAllDipendenti();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Dipendente> updateDipendente(@PathVariable Long id, @Validated @RequestBody DipendentePayload dipendentePayload) {
-        try {
-            Dipendente dipendente = dipendenteService.updateDipendente(id, dipendentePayload);
-            return ResponseEntity.ok(dipendente);
-        } catch (DipendenteNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @PutMapping("/update/{id}")
+    public String updateDipendente(@PathVariable Long id, @Validated @RequestBody DipendentePayload dipendentePayload) {
+        DipendentePayload dipendentAggiornato = dipendenteService.updateDipendente(id, dipendentePayload);
+        return "Il dipendente è stato aggiornato correttamente";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDipendente(@PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public String deleteDipendente(@PathVariable Long id) {
         dipendenteService.deleteDipendente(id);
-        return ResponseEntity.noContent().build();
+        return "Il dipendete è stato rimosso correttamente dal sistema";
     }
 }

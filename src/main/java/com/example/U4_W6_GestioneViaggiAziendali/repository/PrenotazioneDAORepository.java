@@ -14,16 +14,16 @@ public interface PrenotazioneDAORepository extends JpaRepository<Prenotazione, L
 
 
 
-
-    // Query per verificare se il viaggio è già prenotato per una determinata data
-    @Query("SELECT COUNT(p) FROM Prenotazione p WHERE p.idViaggio = :idViaggio AND p.data = :data")
-    Long controlloPrenotazionePerViaggioEData(@Param("idViaggio") Long idViaggio,
-                                              @Param("data") LocalDate data);
-
-    // Query per verificare se l'utente ha già prenotato una postazione per la stessa data
-    @Query("SELECT COUNT(p) FROM Prenotazione p WHERE p.idDipendente = :idDipendente AND p.data = :data")
-    Long controlloPrenotazionePerDipendenteEData(@Param("idDipendente") Long idDipendente,
-                                                 @Param("data") LocalDate data);
-
+//
+//    // Query per verificare se il viaggio è già prenotato per una determinata data
+//    @Query("SELECT COUNT(p) FROM Prenotazione p WHERE p.idViaggio = :idViaggio AND p.data = :data")
+//    Long controlloPrenotazionePerViaggioEData(@Param("idViaggio") Long idViaggio,
+//                                              @Param("data") LocalDate data);
+//
+//    // Query per verificare se l'utente ha già prenotato una postazione per la stessa data
+//    @Query("SELECT COUNT(p) FROM Prenotazione p WHERE p.idDipendente = :idDipendente AND p.data = :data")
+//    Long controlloPrenotazionePerDipendenteEData(@Param("idDipendente") Long idDipendente,
+//                                                 @Param("data") LocalDate data);
+//
 
 }

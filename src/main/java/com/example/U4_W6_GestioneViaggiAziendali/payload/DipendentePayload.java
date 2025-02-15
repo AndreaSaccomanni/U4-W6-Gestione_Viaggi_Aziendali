@@ -1,5 +1,6 @@
 package com.example.U4_W6_GestioneViaggiAziendali.payload;
 
+import com.example.U4_W6_GestioneViaggiAziendali.entities.Prenotazione;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +29,4 @@ public class DipendentePayload {
     @Email(message = "Inserire una email valida")
     private String email;
 
-
-}
+    private List<Prenotazione> prenotazioni;}

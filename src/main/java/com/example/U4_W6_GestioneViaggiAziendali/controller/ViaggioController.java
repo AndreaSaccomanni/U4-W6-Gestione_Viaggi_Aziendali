@@ -3,7 +3,6 @@ package com.example.U4_W6_GestioneViaggiAziendali.controller;
 import com.example.U4_W6_GestioneViaggiAziendali.entities.Viaggio;
 import com.example.U4_W6_GestioneViaggiAziendali.exception.ViaggioNotFound;
 import com.example.U4_W6_GestioneViaggiAziendali.payload.ViaggioPayload;
-import com.example.U4_W6_GestioneViaggiAziendali.repository.ViaggioDAORepository;
 import com.example.U4_W6_GestioneViaggiAziendali.service.ViaggioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,49 +13,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/viaggi")
+@RequestMapping("/viaggio")
 public class ViaggioController {
     @Autowired
     private ViaggioService viaggioService;
 
-    @PostMapping
-    public ResponseEntity<Viaggio> createViaggio(@RequestBody @Validated ViaggioPayload viaggioPayload) {
-        Viaggio viaggio = viaggioService.createViaggio(viaggioPayload);
-        return new ResponseEntity<>(viaggio, HttpStatus.CREATED);
+    @PostMapping("/new")
+    public String createViaggio(@RequestBody @Validated ViaggioPayload viaggioPayload) {
+        Long idGenerato = viaggioService.createViaggio(viaggioPayload);
+        return "Il viaggio con destinazione: " + viaggioPayload.getDestinazione() + " è stato inserito correttamente. Id assegnato: " + idGenerato;
     }
 
+    //singolo viaggio
     @GetMapping("/{id}")
-    public ResponseEntity<Viaggio> getViaggio(@PathVariable Long id) {
-        try {
-            Viaggio viaggio = viaggioService.getViaggio(id);
-            return ResponseEntity.ok(viaggio);
-        } catch (ViaggioNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ViaggioPayload getViaggio(@PathVariable("id") Long id) {
+        return viaggioService.getViaggio(id);
     }
 
-    @GetMapping
-    public List<Viaggio> getAllViaggi() {
+    //tutti i viaggi
+    @GetMapping("/all")
+    public List<ViaggioPayload> getAllViaggi() {
         return viaggioService.getAllViaggi();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Viaggio> updateViaggio(@PathVariable Long id,  @RequestBody @Validated ViaggioPayload viaggioPayload) {
-        try {
-            Viaggio viaggio = viaggioService.updateViaggio(id, viaggioPayload);
-            return ResponseEntity.ok(viaggio);
-        } catch (ViaggioNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @PutMapping("/update/{id}")
+    public String updateViaggio(@PathVariable Long id,  @RequestBody @Validated ViaggioPayload viaggioPayload) {
+        ViaggioPayload viaggioAggiornato = viaggioService.updateViaggio(id, viaggioPayload);
+        return "Il viaggio è stato aggiornato correttamente";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteViaggio(@PathVariable Long id) {
-        try {
-            viaggioService.deleteViaggio(id);
-            return ResponseEntity.noContent().build();
-        } catch (ViaggioNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @DeleteMapping("/delete/{id}")
+    public String deleteViaggio(@PathVariable Long id) {
+        viaggioService.deleteViaggio(id);
+        return "Il viaggio  è stato  rimosso correttammente dal sistema";
     }
 }

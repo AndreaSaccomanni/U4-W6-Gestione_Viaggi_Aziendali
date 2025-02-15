@@ -27,13 +27,15 @@ public class Dipendente {
     @Column(unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "idDipendente")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idDipendente")
     private List<Prenotazione> prenotazioni;
 
-    public Dipendente(String username, String nome, String cognome, String email) {
+    public Dipendente(String username, String nome, String cognome, String email, List<Prenotazione> prenotazioni) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
+        this.prenotazioni = prenotazioni;
     }
 }
