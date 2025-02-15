@@ -42,6 +42,13 @@ public class ViaggioController {
         return "Il viaggio è stato aggiornato correttamente";
     }
 
+    //POSTMAN -> http:localhost8080/viaggio/updateStato/{id}?nuovoStato={nuovoStato}
+    @PutMapping("/updateStato/{id}")
+    public String updateStatoViaggio(@PathVariable Long id, @RequestParam String nuovoStato) {
+        ViaggioPayload viaggioStatoAggiornato = viaggioService.updateStatoViaggio(id, nuovoStato);
+        return "Lo stato del viaggio con id: "+ id + " è stato aggiornato correttamente";
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteViaggio(@PathVariable Long id) {
         viaggioService.deleteViaggio(id);

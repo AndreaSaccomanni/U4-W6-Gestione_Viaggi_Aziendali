@@ -19,15 +19,16 @@ public class Prenotazione {
     @Column(nullable = false)
     private Long idDipendente;
     @Column(nullable = false)
-    private Long idVaggio;
-    @Column(nullable = false)
+    private Long idViaggio;
+    @Column(nullable = false, unique = true)
     private LocalDate data;
+    @Column(nullable = true)
     private String note;
 
 
     public Prenotazione(Long idDipendente, Long idVaggio, LocalDate data, String note) {
         this.idDipendente = idDipendente;
-        this.idVaggio = idVaggio;
+        this.idViaggio = idVaggio;
         this.data = data;
         this.note = note;
     }

@@ -56,6 +56,15 @@ public class ViaggioService {
         return fromEntityToDTO(viaggioDAO.save(viaggio));
     }
 
+    public ViaggioPayload updateStatoViaggio(Long id, String nuovoStato) {
+        Viaggio viaggio = viaggioDAO.findById(id)
+                .orElseThrow(() -> new ViaggioNotFound("Viaggio con id: " + id + " non trovato"));
+
+        viaggio.setStato(nuovoStato);
+
+        return fromEntityToDTO(viaggioDAO.save(viaggio));
+    }
+
 
     public void deleteViaggio(Long id) {
         Viaggio viaggio = viaggioDAO.findById(id)

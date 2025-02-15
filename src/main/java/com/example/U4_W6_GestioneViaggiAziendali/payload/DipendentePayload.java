@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DipendentePayload {
-    @NotBlank(message = "Username non può essere vuoto")
-    @Size(min = 4, message = "Username deve contenere almeno 4 caratteri")
+    @NotBlank(message = "Il campo username non può essere vuoto")
+    @Size(min = 4, message = "Il campo username deve contenere almeno 4 caratteri")
     private String username;
 
     @NotBlank(message = "Il campo nome non può essere vuoto")
