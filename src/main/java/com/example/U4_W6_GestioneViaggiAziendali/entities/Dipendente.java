@@ -31,11 +31,31 @@ public class Dipendente {
     @JoinColumn(name = "idDipendente")
     private List<Prenotazione> prenotazioni;
 
+    private String immagineProfilo;
+
+
+
+    public Dipendente(String username, String nome, String cognome, String email, List<Prenotazione> prenotazioni, String immagineProfilo) {
+        this.username = username;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.prenotazioni = prenotazioni;
+        this.immagineProfilo = immagineProfilo;
+    }
+
     public Dipendente(String username, String nome, String cognome, String email, List<Prenotazione> prenotazioni) {
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.prenotazioni = prenotazioni;
+    }
+
+    public Dipendente(String username, String nome, String cognome, String email) {
+        this.username = username;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
     }
 }

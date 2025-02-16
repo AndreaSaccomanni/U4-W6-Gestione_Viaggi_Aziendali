@@ -7,14 +7,12 @@ import com.example.U4_W6_GestioneViaggiAziendali.payload.DipendentePayload;
 import com.example.U4_W6_GestioneViaggiAziendali.entities.Dipendente;
 import com.example.U4_W6_GestioneViaggiAziendali.exception.DipendenteNotFound;
 import com.example.U4_W6_GestioneViaggiAziendali.payload.PrenotazionePayload;
-import com.example.U4_W6_GestioneViaggiAziendali.payload.ViaggioPayload;
 import com.example.U4_W6_GestioneViaggiAziendali.repository.DipendenteDAORepository;
 import com.example.U4_W6_GestioneViaggiAziendali.repository.PrenotazioneDAORepository;
 import com.example.U4_W6_GestioneViaggiAziendali.repository.ViaggioDAORepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -98,13 +96,6 @@ public class DipendenteService {
         Viaggio viaggio = viaggioDAO.findById(idViaggio)
                 .orElseThrow(() -> new ViaggioNotFound("Viaggio con id: " + idViaggio + " non trovato"));
 
-        //controllo prenotazioni del viaggio per quella data
-        boolean prenotazionePerViaggioEsistente = viaggio.getPrenotazioni().stream()
-                .anyMatch(p -> p.getData().equals(dataPrenotazione));
-
-        if (prenotazionePerViaggioEsistente) {
-            throw new RuntimeException("Esiste già una prenotazione per questo viaggio alla data specificata.");
-        }
 
         // Crea la nuova prenotazione
         Prenotazione prenotazione = new Prenotazione();
@@ -133,7 +124,8 @@ public class DipendenteService {
                 dipendente.getNome(),
                 dipendente.getCognome(),
                 dipendente.getEmail(),
-                dipendente.getPrenotazioni()
+                dipendente.getPrenotazioni(),
+                dipendente.getImmagineProfilo()
         );
     }
 
@@ -143,7 +135,8 @@ public class DipendenteService {
                 dipendentePayload.getNome(),
                 dipendentePayload.getCognome(),
                 dipendentePayload.getEmail(),
-                dipendentePayload.getPrenotazioni()
+                dipendentePayload.getPrenotazioni(),
+                dipendentePayload.getImmagineProfilo()
         );
     }
 
