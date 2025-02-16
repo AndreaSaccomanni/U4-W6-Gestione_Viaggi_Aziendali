@@ -16,7 +16,7 @@ public class PrenotazionePayload {
     private Long idDipendente;
     @NotNull(message = "Il campo 'idViaggio' non può essere vuoto")
     private Long idViaggio;
-
+    @NotNull(message = "Il campo 'data' non può essere vuoto")
     private LocalDate data;
 
     private String note;

@@ -20,9 +20,9 @@ public class Prenotazione {
     private Long idDipendente;
     @Column(nullable = false)
     private Long idViaggio;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private LocalDate data;
-    @Column(nullable = true)
+
     private String note;
 
 
